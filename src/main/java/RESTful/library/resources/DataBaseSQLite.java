@@ -64,7 +64,7 @@ public class DataBaseSQLite {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:library.db");
+			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\library\\library.db");
 			System.out.println("Access Granted.");	    
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
@@ -109,6 +109,45 @@ public class DataBaseSQLite {
 		}  
 		return results;
 
+	}
+	
+	/** Get a book in the database
+	 * @param args id
+	 * @return  
+	 */	
+	public Books get(int ID){
+		Books book= new Books();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs=null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT id,name,author,year,publisher FROM BOOKS WHERE ID="+ID+";" );								
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					book.setId(id);
+					String  name = rs.getString("name");
+					book.setName(name);
+					String author  = rs.getString("author");
+					book.setAuthor(author);
+					int year = rs.getInt("year");
+					book.setYear(year);
+					String publisher = rs.getString("publisher");
+					book.setPublisher(publisher);
+				}
+
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+			
+		}
+		return book;
 	}
 
 	/** Insert a new book or update a book in the database

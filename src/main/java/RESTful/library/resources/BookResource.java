@@ -3,9 +3,11 @@ package RESTful.library.resources;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -28,8 +30,16 @@ public class BookResource {
 	@GET
 	@Produces(MediaType.APPLICATION_XML)	
 	public List<Books> getBooks(){
-		List<Books> books = db.query();		
+		List<Books> books = bookService.getAllBooks();		
 		return books;
+	}
+	
+	@GET
+	@Path("/{bookID}")
+	@Produces(MediaType.APPLICATION_XML)
+	public Books getBook(@PathParam("bookID") int ID){
+		return bookService.getBook(ID);
+		
 	}
 	
 	@POST
@@ -38,4 +48,17 @@ public class BookResource {
 	public Books addBook(Books book) {
 		return bookService.addBook(book);
 	}
+	
+	@DELETE
+	@Path("/{bookID}")
+	@Produces(MediaType.APPLICATION_XML)
+	public String removeBook(@PathParam("bookID") int ID){
+		boolean removed= bookService.deleteBook(ID);
+		String answer="Removed successfully";
+		if(removed = false){
+			answer="Not removed";
+		}
+		return answer;
+	}
+	
 }
