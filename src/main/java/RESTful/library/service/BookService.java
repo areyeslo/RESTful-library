@@ -34,8 +34,8 @@ public class BookService {
 		return bookStore.delete(id);
 	}
 
-
-		
-	
+	public Books findBook(String name) {
+		return bookStore.find(name);
+	}
 
 }
