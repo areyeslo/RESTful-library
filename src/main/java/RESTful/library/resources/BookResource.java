@@ -46,7 +46,9 @@ public class BookResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Books addBook(Books book) {
-		return bookService.addBook(book);
+		if (book != null) 
+			return bookService.addBook(book);
+		return null;
 	}
 	
 	@DELETE
@@ -61,4 +63,13 @@ public class BookResource {
 		return answer;
 	}
 	
+	@GET
+	@Path("/name/{bookName}")
+	@Produces(MediaType.APPLICATION_XML)
+	public Books findBook(@PathParam("bookName") String name) {
+		if (name != null)
+			return bookService.findBook(name);
+		return null;
+		
+	}
 }
