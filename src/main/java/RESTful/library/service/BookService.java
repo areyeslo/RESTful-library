@@ -1,5 +1,6 @@
 package RESTful.library.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import RESTful.library.model.Books;
@@ -25,17 +26,50 @@ public class BookService {
 		return allBooks;		
 	}
 	
+	public List<Books> getAllBooksByYear(int year){
+		List<Books> booksByYear = bookStore.queryByYear(year);
+		return booksByYear;		
+	}
+	
+	public List<Books> getAllBooksByAuthor(String author){
+		List<Books> booksByAuthor = bookStore.queryByAuthor(author);
+		return booksByAuthor;		
+	}
+	
+	public List<Books> getAllBooksByPublisher(String publisher){
+		List<Books> booksByPublisher = bookStore.queryByPublisher(publisher);
+		return booksByPublisher;		
+	}
+	
 	public Books getBook(int ID) {
 		// TODO Auto-generated method stub
-		return bookStore.get(ID);
+		return bookStore.queryByID(ID);
 	}
 	
 	public boolean deleteBook(int id){
 		return bookStore.delete(id);
 	}
+	
+	public boolean deleteBook(String name){
+		return bookStore.delete(name);
+	}
+	
+	public boolean deleteBookYear(int year){
+		return bookStore.deleteYear(year);
+	}
+	
+	public boolean deleteBookAuthor(String author){
+		return bookStore.deleteAuthor(author);
+	}
+	
+	public boolean deleteBookPublisher(String publisher){
+		return bookStore.deletePublisher(publisher);
+	}
 
 	public Books findBook(String name) {
 		return bookStore.find(name);
 	}
+	
+	
 
 }

@@ -64,7 +64,8 @@ public class DataBaseSQLite {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:library.db");
+			//c = DriverManager.getConnection("jdbc:sqlite:library.db");
+			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\library\\library.db");
 			System.out.println("Access Granted.");	    
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
@@ -75,9 +76,11 @@ public class DataBaseSQLite {
 		return c;
 	}
 
-	/** 
-	 * @return  
-	 */
+	
+	/** Query all books
+	 * @param 
+	 * @return all books  
+	 */	
 	public List<Books> query(){
 		List<Books> results = new ArrayList<>();
 		Connection c = null; 
@@ -115,7 +118,7 @@ public class DataBaseSQLite {
 	 * @param args id
 	 * @return  
 	 */	
-	public Books get(int ID){
+	public Books queryByID(int ID){
 		Books book= new Books();
 		Connection c = null; 
 		c = accessDB();
@@ -230,6 +233,118 @@ public class DataBaseSQLite {
 		return true;
 	}
 	
+	/** Delete a book from the database
+	 * @param name
+	 * @return true if everything is done otherwise returns false
+	 */
+	public boolean delete(String name) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BOOKS WHERE NAME='"+ name +"';";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("Deleted "+name);
+		return true;
+	}
+	
+	/** Delete a book from the database
+	 * @param year
+	 * @return true if everything is done otherwise returns false
+	 */
+	public boolean deleteYear(int year) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BOOKS WHERE YEAR='"+ year +"';";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("Deleted all books of year: "+year);
+		return true;
+	}
+	
+	/** Delete a book from the database
+	 * @param publisher
+	 * @return true if everything is done otherwise returns false
+	 */
+	public boolean deletePublisher(String publisher) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BOOKS WHERE PUBLISHER='"+ publisher +"';";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("Deleted all books of publisher: "+publisher);
+		return true;
+	}
+	
+	/** Delete a book from the database
+	 * @param author
+	 * @return true if everything is done otherwise returns false
+	 */
+	public boolean deleteAuthor(String author) {
+		Connection c = null;
+		c = accessDB();
+		if (c != null) {
+			try {
+				Statement stmt = null;
+				// Execute a query
+				stmt = c.createStatement();
+				String sql = "DELETE FROM BOOKS WHERE AUTHOR='"+ author +"';";
+				stmt.executeUpdate(sql);
+				c.commit();
+
+				stmt.close();
+				c.close();
+			} catch ( Exception e ) {
+				// Handle errors for Class.forName
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				return false;
+			}
+		}
+		System.out.println("Deleted all books of the author : "+author);
+		return true;
+	}
+	
 	/** Find a book in the database
 	 * @param args name
 	 * @return all information which is related to the book  
@@ -267,5 +382,116 @@ public class DataBaseSQLite {
 			
 		}
 		return book;
+	}
+
+	/** Find a list of books by year
+	 * @param args year
+	 * @return all books which matches the year  
+	 */	
+	public List<Books> queryByYear(int year) {
+		// TODO Auto-generated method stub
+		List<Books> bookYear = new ArrayList<>();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs = null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE YEAR='"+year+"';" );								
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					String  name = rs.getString("name");
+					String author  = rs.getString("author");
+					String publisher = rs.getString("publisher");
+					Books b= new Books(id,name,author,year,publisher);                
+					//add the record into the list
+					bookYear.add(b);
+				}
+
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+			
+		}
+		return bookYear;
+	}
+	
+	/** Find a list of books by author
+	 * @param args author
+	 * @return all books which matches the author  
+	 */	
+	public List<Books> queryByAuthor(String author) {
+		// TODO Auto-generated method stub
+		List<Books> bookAuthor = new ArrayList<>();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs = null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE AUTHOR='"+author+"';" );								
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					String  name = rs.getString("name");
+					int year = rs.getInt("year");
+					String publisher = rs.getString("publisher");
+					Books b= new Books(id,name,author,year,publisher);                
+					//add the record into the list
+					bookAuthor.add(b);
+				}
+
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+			
+		}
+		return bookAuthor;
+	}
+	
+	/** Find a list of books by publisher
+	 * @param args publisher
+	 * @return all books which matches the publisher
+	 */	
+	public List<Books> queryByPublisher(String publisher) {
+		// TODO Auto-generated method stub
+		List<Books> bookPublisher = new ArrayList<>();
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs = null;				 
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE PUBLISHER='"+publisher+"';" );								
+				while ( rs.next() ) {
+					//Get record from cursor
+					int id = rs.getInt("id");
+					String  name = rs.getString("name");
+					String author  = rs.getString("author");
+					int year = rs.getInt("year");
+					Books b= new Books(id,name,author,year,publisher);                
+					//add the record into the list
+					bookPublisher.add(b);
+				}
+
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+			
+		}
+		return bookPublisher;
 	}
 }

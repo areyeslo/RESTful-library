@@ -28,7 +28,7 @@ public class BookResource {
 	BookService bookService = new BookService();
 	
 	@GET
-	@Produces(MediaType.APPLICATION_XML)	
+	@Produces(MediaType.APPLICATION_JSON)	
 	public List<Books> getBooks(){
 		List<Books> books = bookService.getAllBooks();		
 		return books;
@@ -36,7 +36,7 @@ public class BookResource {
 	
 	@GET
 	@Path("/{bookID}")
-	@Produces(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Books getBook(@PathParam("bookID") int ID){
 		return bookService.getBook(ID);
 		
@@ -53,7 +53,7 @@ public class BookResource {
 	
 	@DELETE
 	@Path("/{bookID}")
-	@Produces(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public String removeBook(@PathParam("bookID") int ID){
 		boolean removed= bookService.deleteBook(ID);
 		String answer="Removed successfully";
@@ -62,6 +62,55 @@ public class BookResource {
 		}
 		return answer;
 	}
+	
+	@DELETE
+	@Path("/name/{bookName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeBook(@PathParam("bookName") String name){
+		boolean removed= bookService.deleteBook(name);
+		String answer="Removed successfully";
+		if(removed = false){
+			answer="Not removed";
+		}
+		return answer;
+	}
+	
+	@DELETE
+	@Path("/year/{bookYear}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeBookYear(@PathParam("bookYear") int year){
+		boolean removed= bookService.deleteBookYear(year);
+		String answer="Removed successfully";
+		if(removed = false){
+			answer="Not removed";
+		}
+		return answer;
+	}
+	
+	@DELETE
+	@Path("/author/{bookAuthor}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeBookAuthor(@PathParam("bookAuthor") String author){
+		boolean removed= bookService.deleteBookAuthor(author);
+		String answer="Removed successfully";
+		if(removed = false){
+			answer="Not removed";
+		}
+		return answer;
+	}
+	
+	@DELETE
+	@Path("/publisher/{bookPublisher}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String removeBookPublisher(@PathParam("bookPublisher") String publisher){
+		boolean removed= bookService.deleteBookPublisher(publisher);
+		String answer="Removed successfully";
+		if(removed = false){
+			answer="Not removed";
+		}
+		return answer;
+	}
+	
 	
 	@GET
 	@Path("/name/{bookName}")
@@ -72,4 +121,29 @@ public class BookResource {
 		return null;
 		
 	}
+	
+	@GET
+	@Path("/year/{bookYear}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<Books> getBooksByAuthor(@PathParam("bookYear")int year){
+		List<Books> books = bookService.getAllBooksByYear(year);		
+		return books;
+	}
+	
+	@GET
+	@Path("/author/{bookAuthor}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<Books> getBooksByAuthor(@PathParam("bookAuthor")String author){
+		List<Books> books = bookService.getAllBooksByAuthor(author);		
+		return books;
+	}
+	
+	@GET
+	@Path("/publisher/{bookPublisher}")
+	@Produces(MediaType.APPLICATION_JSON)	
+	public List<Books> getBooksByPublisher(@PathParam("bookPublisher")String publisher){
+		List<Books> books = bookService.getAllBooksByPublisher(publisher);		
+		return books;
+	}
+	
 }
