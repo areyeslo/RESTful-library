@@ -1,17 +1,21 @@
 package RESTful.library.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import RESTful.library.model.Books;
 import RESTful.library.resources.DataBaseSQLite;
+import RESTful.library.utility.Utility;
 
 public class BookService {
 	
 	private static DataBaseSQLite bookStore = new DataBaseSQLite();
+	private static Utility control = new Utility();
 	
 	public Books addBook(Books book) {
 		try {
+			if (!control.checkAdd(bookStore))
+				return null;
+
 			int ID = bookStore.put(book.getName(), book.getAuthor(), book.getYear(), book.getPublisher());
 			book.setId(ID);
 		} catch (Exception e) {
