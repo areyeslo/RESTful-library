@@ -65,7 +65,7 @@ public class DataBaseSQLite {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			//c = DriverManager.getConnection("jdbc:sqlite:library.db");
-			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\library\\library.db");
+			c = DriverManager.getConnection("jdbc:sqlite:library.db");
 			System.out.println("Access Granted.");	    
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
@@ -493,5 +493,34 @@ public class DataBaseSQLite {
 			
 		}
 		return bookPublisher;
+	}
+	
+	/** Count the list of available books in the database
+	 * @return number of books
+	 */	
+	public int getCount() {
+		int rowCount = 0;
+		Connection c = null; 
+		c = accessDB();
+		if (c != null){
+			try{
+				ResultSet rs = null;
+				
+				Statement stmt = c.createStatement();
+				rs = stmt.executeQuery("SELECT COUNT(*) FROM BOOKS;");								
+				while ( rs.next() ) {
+					rowCount = Integer.parseInt(rs.getString("count(*)"));
+				}
+				System.out.println("Count : " + rowCount);
+				rs.close();
+				stmt.close();
+				c.close();
+			}catch ( Exception e ) {
+				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+				System.exit(0);
+			}
+			
+		}
+		return rowCount;
 	}
 }
