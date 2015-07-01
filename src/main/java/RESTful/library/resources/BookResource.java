@@ -1,7 +1,9 @@
 package RESTful.library.resources;
 
-import java.util.List;
+import RESTful.library.service.BookService;
+import RESTful.library.model.Books;
 
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,8 +13,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import RESTful.library.service.BookService;
-import RESTful.library.model.Books;
 
 
 /** This class will implement all the request on the resource: 
@@ -22,14 +22,14 @@ import RESTful.library.model.Books;
  * POST
  */
 @Path("/books")
-public class BookResource {
-    
+public class BookResource{
+	
 	DataBaseSQLite db = new DataBaseSQLite();
 	BookService bookService = new BookService();
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)	
-	public List<Books> getBooks(){
+    public List<Books> getBooks(){
 		List<Books> books = bookService.getAllBooks();		
 		return books;
 	}
@@ -41,7 +41,7 @@ public class BookResource {
 		return bookService.getBook(ID);
 		
 	}
-	
+		
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ public class BookResource {
 	
 	@DELETE
 	@Path("/{bookID}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
 	public String removeBook(@PathParam("bookID") int ID){
 		boolean removed= bookService.deleteBook(ID);
 		String answer="Removed successfully";
@@ -101,7 +101,7 @@ public class BookResource {
 	
 	@DELETE
 	@Path("/publisher/{bookPublisher}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)	
 	public String removeBookPublisher(@PathParam("bookPublisher") String publisher){
 		boolean removed= bookService.deleteBookPublisher(publisher);
 		String answer="Removed successfully";
@@ -111,10 +111,9 @@ public class BookResource {
 		return answer;
 	}
 	
-	
 	@GET
 	@Path("/name/{bookName}")
-	@Produces(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)		
 	public Books findBook(@PathParam("bookName") String name) {
 		if (name != null)
 			return bookService.findBook(name);
@@ -124,15 +123,15 @@ public class BookResource {
 	
 	@GET
 	@Path("/year/{bookYear}")
-	@Produces(MediaType.APPLICATION_JSON)	
-	public List<Books> getBooksByAuthor(@PathParam("bookYear")int year){
+	@Produces(MediaType.APPLICATION_JSON)		
+	public List<Books> getBooksByYear(@PathParam("bookYear")int year){
 		List<Books> books = bookService.getAllBooksByYear(year);		
 		return books;
 	}
-	
+		
 	@GET
 	@Path("/author/{bookAuthor}")
-	@Produces(MediaType.APPLICATION_JSON)	
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<Books> getBooksByAuthor(@PathParam("bookAuthor")String author){
 		List<Books> books = bookService.getAllBooksByAuthor(author);		
 		return books;

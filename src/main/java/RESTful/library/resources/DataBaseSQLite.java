@@ -64,8 +64,8 @@ public class DataBaseSQLite {
 		Connection c = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Arturo\\Documents\\SelfAdaptiveSystems\\workspace\\library\\library.db");
 			//c = DriverManager.getConnection("jdbc:sqlite:library.db");
-			c = DriverManager.getConnection("jdbc:sqlite:library.db");
 			System.out.println("Access Granted.");	    
 		} catch (Exception e) {
 			// Handle errors for Class.forName and handle errors for JDBC
@@ -89,7 +89,7 @@ public class DataBaseSQLite {
 			try{
 				ResultSet rs=null;				 
 				Statement stmt = c.createStatement();
-				rs = stmt.executeQuery( "SELECT id,name,author,year,publisher FROM BOOKS;" );								
+				rs = stmt.executeQuery( "SELECT id,name,author,year,publisher FROM BOOKS order by id asc;" );								
 				while ( rs.next() ) {
 					//Get record from cursor
 					int id = rs.getInt("id");
@@ -397,7 +397,7 @@ public class DataBaseSQLite {
 			try{
 				ResultSet rs = null;				 
 				Statement stmt = c.createStatement();
-				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE YEAR='"+year+"';" );								
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE YEAR='"+year+"'"+" order by id asc;" );								
 				while ( rs.next() ) {
 					//Get record from cursor
 					int id = rs.getInt("id");
@@ -434,7 +434,7 @@ public class DataBaseSQLite {
 			try{
 				ResultSet rs = null;				 
 				Statement stmt = c.createStatement();
-				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE AUTHOR='"+author+"';" );								
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE AUTHOR='"+author+"'"+" order by id asc;" );								
 				while ( rs.next() ) {
 					//Get record from cursor
 					int id = rs.getInt("id");
@@ -471,7 +471,7 @@ public class DataBaseSQLite {
 			try{
 				ResultSet rs = null;				 
 				Statement stmt = c.createStatement();
-				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE PUBLISHER='"+publisher+"';" );								
+				rs = stmt.executeQuery( "SELECT * FROM BOOKS WHERE PUBLISHER='"+publisher+"'"+"order by id asc;" );								
 				while ( rs.next() ) {
 					//Get record from cursor
 					int id = rs.getInt("id");
